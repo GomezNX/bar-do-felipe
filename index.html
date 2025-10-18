@@ -47,6 +47,30 @@
   </div>
   <div id="contasMensais"></div>
 </section>
+    <div class="tabs">
+  <button class="tablink active" onclick="abrirAba(event, 'clientes')">☰ Clientes</button>
+  <button class="tablink" onclick="abrirAba(event, 'bebidas')">☰ Bebidas</button>
+  <button class="tablink" onclick="abrirAba(event, 'comandas')">☰ Comandas</button>
+  <button class="tablink" onclick="abrirAba(event, 'fiado')">☰ Fiado</button>
+</div>
+
+<div id="clientes" class="tabcontent">
+  <!-- Seção de Clientes antiga -->
+</div>
+
+<div id="bebidas" class="tabcontent" style="display:none;">
+  <!-- Seção de Bebidas antiga -->
+</div>
+
+<div id="comandas" class="tabcontent" style="display:none;">
+  <!-- Seção de Comandas antiga -->
+</div>
+
+<div id="fiado" class="tabcontent" style="display:none;">
+  <h2>Clientes Fiéis</h2>
+  <ul id="listaFiado"></ul>
+  <div id="detalhesFiado"></div>
+</div>
   </main>
 
   <footer>
