@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BAR DO FELIPE 🍻</title>
+  <link rel="stylesheet" href="styles/style.css" />
+</head>
+<body>
+  <header>
+    <h1>🍺 BAR DO FELIPE 🍺</h1>
+    <p>Sistema de Comandas Online</p>
+  </header>
+
+  <main>
+    <!-- Seção de Clientes -->
+    <section class="card">
+      <h2>Clientes / Mesas</h2>
+      <div class="row">
+        <input type="text" id="clienteNome" placeholder="Nome ou Mesa" />
+        <button onclick="adicionarCliente()">Adicionar</button>
+      </div>
+      <ul id="listaClientes"></ul>
+    </section>
+
+    <!-- Seção de Bebidas -->
+    <section class="card">
+      <h2>Bebidas</h2>
+      <div class="row">
+        <input type="text" id="bebidaNome" placeholder="Nome da bebida" />
+        <input type="number" id="bebidaPreco" placeholder="Preço (R$)" />
+        <button onclick="adicionarBebida()">Adicionar</button>
+      </div>
+      <ul id="listaBebidas"></ul>
+    </section>
+
+    <!-- Seção de Comandas -->
+    <section class="card">
+      <h2>Comandas</h2>
+      <div id="comandasContainer"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>💻 Desenvolvido para o <strong>BAR DO FELIPE</strong></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
