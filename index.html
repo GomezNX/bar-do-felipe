@@ -1,83 +1,67 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BAR DO FELIPE 🍻</title>
-  <link rel="stylesheet" href="styles/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAR DO FELIPE</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <header>
-    <h1>🍺 BAR DO FELIPE 🍺</h1>
-    <p>Sistema de Comandas Online</p>
-  </header>
 
-  <main>
-    <!-- Seção de Clientes -->
+  <h1>BAR DO FELIPE</h1>
+
+  <!-- ABAS -->
+  <div class="tabs">
+    <button class="tablink active" onclick="abrirAba(event, 'clientes')">☰ Clientes</button>
+    <button class="tablink" onclick="abrirAba(event, 'bebidas')">☰ Bebidas</button>
+    <button class="tablink" onclick="abrirAba(event, 'comandas')">☰ Comandas</button>
+    <button class="tablink" onclick="abrirAba(event, 'fiado')">☰ Fiado</button>
+  </div>
+
+  <!-- CLIENTES -->
+  <div id="clientes" class="tabcontent">
     <section class="card">
       <h2>Clientes / Mesas</h2>
       <div class="row">
-        <input type="text" id="clienteNome" placeholder="Nome ou Mesa" />
+        <input type="text" id="clienteNome" placeholder="Nome do Cliente">
         <button onclick="adicionarCliente()">Adicionar</button>
       </div>
       <ul id="listaClientes"></ul>
     </section>
+  </div>
 
-    <!-- Seção de Bebidas -->
+  <!-- BEBIDAS -->
+  <div id="bebidas" class="tabcontent" style="display:none;">
     <section class="card">
       <h2>Bebidas</h2>
       <div class="row">
-        <input type="text" id="bebidaNome" placeholder="Nome da bebida" />
-        <input type="number" id="bebidaPreco" placeholder="Preço (R$)" />
+        <input type="text" id="bebidaNome" placeholder="Nome da Bebida">
+        <input type="number" id="bebidaPreco" placeholder="Preço" step="0.01">
         <button onclick="adicionarBebida()">Adicionar</button>
       </div>
       <ul id="listaBebidas"></ul>
     </section>
+  </div>
 
-    <!-- Seção de Comandas -->
+  <!-- COMANDAS -->
+  <div id="comandas" class="tabcontent" style="display:none;">
     <section class="card">
       <h2>Comandas</h2>
       <div id="comandasContainer"></div>
     </section>
-    <section class="card">
-  <h2>Contas Mensais</h2>
-  <div class="row">
-    <input type="month" id="mesSelecionado" />
-    <button onclick="verContas()">Ver contas</button>
   </div>
-  <div id="contasMensais"></div>
-</section>
-    <div class="tabs">
-  <button class="tablink active" onclick="abrirAba(event, 'clientes')">☰ Clientes</button>
-  <button class="tablink" onclick="abrirAba(event, 'bebidas')">☰ Bebidas</button>
-  <button class="tablink" onclick="abrirAba(event, 'comandas')">☰ Comandas</button>
-  <button class="tablink" onclick="abrirAba(event, 'fiado')">☰ Fiado</button>
-</div>
 
-<div id="clientes" class="tabcontent">
-  <!-- Seção de Clientes antiga -->
-</div>
+  <!-- FIADO -->
+  <div id="fiado" class="tabcontent" style="display:none;">
+    <section class="card">
+      <h2>Clientes Fiéis</h2>
+      <ul id="listaFiado"></ul>
+      <div id="detalhesFiado"></div>
+    </section>
+  </div>
 
-<div id="bebidas" class="tabcontent" style="display:none;">
-  <!-- Seção de Bebidas antiga -->
-</div>
-
-<div id="comandas" class="tabcontent" style="display:none;">
-  <!-- Seção de Comandas antiga -->
-</div>
-
-<div id="fiado" class="tabcontent" style="display:none;">
-  <h2>Clientes Fiéis</h2>
-  <ul id="listaFiado"></ul>
-  <div id="detalhesFiado"></div>
-</div>
-  </main>
-
-  <footer>
-    <p>💻 Desenvolvido para o <strong>BAR DO FELIPE</strong></p>
-  </footer>
-
+  <!-- APP.JS -->
   <script src="app.js"></script>
 </body>
 </html>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
