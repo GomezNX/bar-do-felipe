@@ -1,0 +1,116 @@
+/* ===== BAR DO FELIPE - Estilo Principal ===== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #1b1b1b;
+  color: #fff;
+}
+
+header {
+  text-align: center;
+  background-color: #d19a00;
+  color: #1b1b1b;
+  padding: 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.2em;
+}
+
+header p {
+  font-weight: 500;
+  margin-top: 5px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.card {
+  background-color: #2b2b2b;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 0 10px #00000066;
+}
+
+.card h2 {
+  margin-top: 0;
+  color: #ffcc00;
+  text-align: center;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+button {
+  background-color: #d19a00;
+  color: #1b1b1b;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #ffcc00;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  background-color: #333;
+  border-radius: 5px;
+  padding: 8px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li span {
+  font-weight: 500;
+}
+
+footer {
+  text-align: center;
+  background-color: #111;
+  padding: 10px;
+  color: #aaa;
+  font-size: 0.9em;
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 600px) {
+  button, input {
+    flex: 100%;
+  }
+
+  .row {
+    flex-direction: column;
+  }
+}
