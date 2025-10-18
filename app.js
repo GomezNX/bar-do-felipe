@@ -1,22 +1,23 @@
-/* ===== BAR DO FELIPE - Lógica Completa com Contas Mensais ===== */
+/* ===== BAR DO FELIPE - Lógica Completa com Abas e Fiado ===== */
 
 let clientes = [];
 let bebidas = [];
 let comandas = [];
-let historicoClientes = []; // Guarda comandas finalizadas por mês
 
 /* ===== CLIENTES ===== */
 function adicionarCliente() {
   const nome = document.getElementById("clienteNome").value.trim();
   if (!nome) return alert("Digite o nome do cliente ou mesa!");
-  const cliente = { id: gerarId(), nome, aberto: true };
+  const cliente = { id: gerarId(), nome, comanda: { itens: [] } };
   clientes.push(cliente);
   document.getElementById("clienteNome").value = "";
   renderClientes();
+  renderFiado();
 }
 
 function renderClientes() {
   const lista = document.getElementById("listaClientes");
+  if(!lista) return;
   lista.innerHTML = "";
   clientes.forEach((c) => {
     const li = document.createElement("li");
@@ -43,6 +44,7 @@ function adicionarBebida() {
 
 function renderBebidas() {
   const lista = document.getElementById("listaBebidas");
+  if(!lista) return;
   lista.innerHTML = "";
   bebidas.forEach((b) => {
     const li = document.createElement("li");
@@ -54,18 +56,16 @@ function renderBebidas() {
 /* ===== COMANDAS ===== */
 function abrirComanda(clienteId) {
   const container = document.getElementById("comandasContainer");
-  const cliente = clientes.find((c) => c.id === clienteId);
-  const comanda = comandas.find((co) => co.clienteId === clienteId) || { clienteId, itens: [] };
-  comandas = comandas.filter((co) => co.clienteId !== clienteId);
-  comandas.push(comanda);
-
+  const cliente = clientes.find(c => c.id === clienteId);
+  const comanda = cliente.comanda;
+  
   container.innerHTML = `
     <div class="card">
       <h3>Comanda - ${cliente.nome}</h3>
       <div class="row">
         <select id="bebidaSelect">
           <option value="">Selecione uma bebida</option>
-          ${bebidas.map((b) => `<option value="${b.id}">${b.nome} - R$${b.preco}</option>`).join("")}
+          ${bebidas.map(b => `<option value="${b.id}">${b.nome} - R$${b.preco}</option>`).join("")}
         </select>
         <input type="number" id="quantidade" placeholder="Qtd" min="1" value="1" />
         <button onclick="adicionarItem('${clienteId}')">Adicionar</button>
@@ -83,21 +83,22 @@ function adicionarItem(clienteId) {
   const qtd = parseInt(document.getElementById("quantidade").value);
   if (!bebidaId || qtd <= 0) return alert("Selecione a bebida e quantidade!");
 
-  const bebida = bebidas.find((b) => b.id === bebidaId);
-  const comanda = comandas.find((co) => co.clienteId === clienteId);
-
-  comanda.itens.push({
+  const bebida = bebidas.find(b => b.id === bebidaId);
+  const cliente = clientes.find(c => c.id === clienteId);
+  cliente.comanda.itens.push({
     bebidaId,
     nome: bebida.nome,
     preco: bebida.preco,
-    quantidade: qtd,
+    quantidade: qtd
   });
 
   renderItensComanda(clienteId);
+  renderFiado(); // Atualiza o total do fiado
 }
 
 function renderItensComanda(clienteId) {
-  const comanda = comandas.find((co) => co.clienteId === clienteId);
+  const cliente = clientes.find(c => c.id === clienteId);
+  const comanda = cliente.comanda;
   const lista = document.getElementById("itensComanda");
   const totalEl = document.getElementById("totalComanda");
 
@@ -119,58 +120,70 @@ function renderItensComanda(clienteId) {
 }
 
 function removerItem(clienteId, index) {
-  const comanda = comandas.find((co) => co.clienteId === clienteId);
-  comanda.itens.splice(index, 1);
+  const cliente = clientes.find(c => c.id === clienteId);
+  cliente.comanda.itens.splice(index, 1);
   renderItensComanda(clienteId);
+  renderFiado();
 }
 
-/* ===== FINALIZAR COMANDA COM HISTÓRICO ===== */
+/* ===== FINALIZAR COMANDA ===== */
 function finalizarComanda(clienteId) {
   if (!confirm("Finalizar esta comanda?")) return;
 
-  const cliente = clientes.find((c) => c.id === clienteId);
-  const comanda = comandas.find((co) => co.clienteId === clienteId);
-
-  if (comanda && comanda.itens.length > 0) {
-    const mesAtual = new Date().toISOString().slice(0,7); // YYYY-MM
-    historicoClientes.push({
-      nome: cliente.nome,
-      mes: mesAtual,
-      itens: comanda.itens.map(i => ({ ...i })),
-      total: comanda.itens.reduce((sum, i) => sum + i.preco*i.quantidade, 0)
-    });
-  }
-
-  // Remove cliente e comanda
-  comandas = comandas.filter(co => co.clienteId !== clienteId);
-  clientes = clientes.filter((c) => c.id !== clienteId);
-  document.getElementById("comandasContainer").innerHTML = "";
+  const cliente = clientes.find(c => c.id === clienteId);
+  cliente.comanda.itens = []; // Limpa comanda, mas mantém fiado acumulado
   renderClientes();
+  renderFiado();
+  document.getElementById("comandasContainer").innerHTML = "";
 }
 
-/* ===== VER CONTAS MENSAL ===== */
-function verContas() {
-  const mes = document.getElementById("mesSelecionado").value;
-  const container = document.getElementById("contasMensais");
-  container.innerHTML = "";
+/* ===== FIADO POR CLIENTE ===== */
+function renderFiado() {
+  const lista = document.getElementById("listaFiado");
+  if(!lista) return;
+  lista.innerHTML = "";
 
-  const contasDoMes = historicoClientes.filter(h => h.mes === mes);
-
-  contasDoMes.forEach(h => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      <h3>${h.nome} - Total: R$${h.total.toFixed(2)}</h3>
-      <ul>
-        ${h.itens.map(i => `<li>${i.nome} (${i.quantidade}x) - R$${(i.preco*i.quantidade).toFixed(2)}</li>`).join("")}
-      </ul>
-    `;
-    container.appendChild(div);
+  clientes.forEach(c => {
+    const total = c.comanda.itens.reduce((sum, i) => sum + i.preco*i.quantidade, 0);
+    const li = document.createElement("li");
+    li.innerHTML = `<span onclick="verFiado('${c.id}')">${c.nome} - R$${total.toFixed(2)}</span>`;
+    lista.appendChild(li);
   });
+}
 
-  if (contasDoMes.length === 0) {
-    container.innerHTML = "<p>Nenhuma conta neste mês</p>";
+function verFiado(clienteId) {
+  const detalhes = document.getElementById("detalhesFiado");
+  const cliente = clientes.find(c => c.id === clienteId);
+  if (!cliente || cliente.comanda.itens.length === 0) {
+    detalhes.innerHTML = "<p>Sem consumo registrado</p>";
+    return;
   }
+
+  const itens = cliente.comanda.itens;
+  const total = itens.reduce((sum, i) => sum + i.preco*i.quantidade, 0);
+
+  detalhes.innerHTML = `
+    <h3>${cliente.nome} - Total: R$${total.toFixed(2)}</h3>
+    <ul>
+      ${itens.map(i => `<li>${i.nome} (${i.quantidade}x) - R$${(i.preco*i.quantidade).toFixed(2)}</li>`).join("")}
+    </ul>
+  `;
+}
+
+/* ===== ABAS ===== */
+function abrirAba(evt, nomeAba) {
+  const tabcontent = document.getElementsByClassName("tabcontent");
+  for (let i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  const tablinks = document.getElementsByClassName("tablink");
+  for (let i = 0; i < tablinks.length; i++) {
+    tablinks[i].classList.remove("active");
+  }
+
+  document.getElementById(nomeAba).style.display = "block";
+  evt.currentTarget.classList.add("active");
 }
 
 /* ===== UTIL ===== */
