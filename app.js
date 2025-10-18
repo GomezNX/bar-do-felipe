@@ -1,9 +1,9 @@
-/* ===== BAR DO FELIPE - Lógica Principal ===== */
+/* ===== BAR DO FELIPE - Lógica Completa com Contas Mensais ===== */
 
-// Dados armazenados temporariamente (em breve conectar no Supabase)
 let clientes = [];
 let bebidas = [];
 let comandas = [];
+let historicoClientes = []; // Guarda comandas finalizadas por mês
 
 /* ===== CLIENTES ===== */
 function adicionarCliente() {
@@ -46,9 +46,7 @@ function renderBebidas() {
   lista.innerHTML = "";
   bebidas.forEach((b) => {
     const li = document.createElement("li");
-    li.innerHTML = `
-      <span>${b.nome} - R$${b.preco.toFixed(2)}</span>
-    `;
+    li.innerHTML = `<span>${b.nome} - R$${b.preco.toFixed(2)}</span>`;
     lista.appendChild(li);
   });
 }
@@ -57,10 +55,7 @@ function renderBebidas() {
 function abrirComanda(clienteId) {
   const container = document.getElementById("comandasContainer");
   const cliente = clientes.find((c) => c.id === clienteId);
-  const comanda = comandas.find((co) => co.clienteId === clienteId) || {
-    clienteId,
-    itens: [],
-  };
+  const comanda = comandas.find((co) => co.clienteId === clienteId) || { clienteId, itens: [] };
   comandas = comandas.filter((co) => co.clienteId !== clienteId);
   comandas.push(comanda);
 
@@ -70,9 +65,7 @@ function abrirComanda(clienteId) {
       <div class="row">
         <select id="bebidaSelect">
           <option value="">Selecione uma bebida</option>
-          ${bebidas
-            .map((b) => `<option value="${b.id}">${b.nome} - R$${b.preco}</option>`)
-            .join("")}
+          ${bebidas.map((b) => `<option value="${b.id}">${b.nome} - R$${b.preco}</option>`).join("")}
         </select>
         <input type="number" id="quantidade" placeholder="Qtd" min="1" value="1" />
         <button onclick="adicionarItem('${clienteId}')">Adicionar</button>
@@ -131,12 +124,53 @@ function removerItem(clienteId, index) {
   renderItensComanda(clienteId);
 }
 
+/* ===== FINALIZAR COMANDA COM HISTÓRICO ===== */
 function finalizarComanda(clienteId) {
   if (!confirm("Finalizar esta comanda?")) return;
-  comandas = comandas.filter((co) => co.clienteId !== clienteId);
+
+  const cliente = clientes.find((c) => c.id === clienteId);
+  const comanda = comandas.find((co) => co.clienteId === clienteId);
+
+  if (comanda && comanda.itens.length > 0) {
+    const mesAtual = new Date().toISOString().slice(0,7); // YYYY-MM
+    historicoClientes.push({
+      nome: cliente.nome,
+      mes: mesAtual,
+      itens: comanda.itens.map(i => ({ ...i })),
+      total: comanda.itens.reduce((sum, i) => sum + i.preco*i.quantidade, 0)
+    });
+  }
+
+  // Remove cliente e comanda
+  comandas = comandas.filter(co => co.clienteId !== clienteId);
   clientes = clientes.filter((c) => c.id !== clienteId);
   document.getElementById("comandasContainer").innerHTML = "";
   renderClientes();
+}
+
+/* ===== VER CONTAS MENSAL ===== */
+function verContas() {
+  const mes = document.getElementById("mesSelecionado").value;
+  const container = document.getElementById("contasMensais");
+  container.innerHTML = "";
+
+  const contasDoMes = historicoClientes.filter(h => h.mes === mes);
+
+  contasDoMes.forEach(h => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <h3>${h.nome} - Total: R$${h.total.toFixed(2)}</h3>
+      <ul>
+        ${h.itens.map(i => `<li>${i.nome} (${i.quantidade}x) - R$${(i.preco*i.quantidade).toFixed(2)}</li>`).join("")}
+      </ul>
+    `;
+    container.appendChild(div);
+  });
+
+  if (contasDoMes.length === 0) {
+    container.innerHTML = "<p>Nenhuma conta neste mês</p>";
+  }
 }
 
 /* ===== UTIL ===== */
