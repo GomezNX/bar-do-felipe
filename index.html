@@ -1,68 +1,71 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BAR DO FELIPE</title>
-  <link rel="stylesheet" href="styles/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🍻 Bar do Felipe</title>
+  <link rel="stylesheet" href="styles/style.css" />
 </head>
 <body>
 
-  <h1>BAR DO FELIPE</h1>
+  <header>
+    <button id="menu-btn" onclick="toggleMenu()">☰</button>
+    <h1>Bar do Felipe</h1>
+  </header>
 
-  <!-- ABAS -->
-  <div class="tabs">
-    <button class="tablink active" onclick="abrirAba(event, 'clientes')">☰ Clientes</button>
-    <button class="tablink" onclick="abrirAba(event, 'bebidas')">☰ Bebidas</button>
-    <button class="tablink" onclick="abrirAba(event, 'comandas')">☰ Comandas</button>
-    <button class="tablink" onclick="abrirAba(event, 'fiado')">☰ Fiado</button>
-  </div>
+  <nav id="menu" class="hidden">
+    <button onclick="abrirAba('bebidas')">🍺 Bebidas</button>
+    <button onclick="abrirAba('clientes')">👤 Clientes</button>
+    <button onclick="abrirAba('fiado')">💰 Fiado</button>
+  </nav>
 
-  <!-- CLIENTES -->
-  <div id="clientes" class="tabcontent">
-    <section class="card">
-      <h2>Clientes / Mesas</h2>
-      <div class="row">
-        <input type="text" id="clienteNome" placeholder="Nome do Cliente">
-        <button onclick="adicionarCliente()">Adicionar</button>
-      </div>
-      <ul id="listaClientes"></ul>
-    </section>
-  </div>
-
-  <!-- BEBIDAS -->
-  <div id="bebidas" class="tabcontent" style="display:none;">
-    <section class="card">
+  <main>
+    <!-- ABA BEBIDAS -->
+    <section id="aba-bebidas" class="aba ativa">
       <h2>Bebidas</h2>
-      <div class="row">
-        <input type="text" id="bebidaNome" placeholder="Nome da Bebida">
-        <input type="number" id="bebidaPreco" placeholder="Preço" step="0.01">
-        <button onclick="adicionarBebida()">Adicionar</button>
-      </div>
-      <ul id="listaBebidas"></ul>
+      <input type="text" id="bebida-nome" placeholder="Nome da bebida" />
+      <input type="number" id="bebida-preco" placeholder="Preço" step="0.01" />
+      <button onclick="adicionarBebida()">Adicionar</button>
+      <ul id="lista-bebidas"></ul>
     </section>
-  </div>
 
-  <!-- COMANDAS -->
-  <div id="comandas" class="tabcontent" style="display:none;">
-    <section class="card">
-      <h2>Comandas</h2>
-      <div id="comandasContainer"></div>
+    <!-- ABA CLIENTES -->
+    <section id="aba-clientes" class="aba">
+      <h2>Clientes</h2>
+      <input type="text" id="cliente-nome" placeholder="Nome do cliente" />
+      <button onclick="adicionarCliente()">Registrar</button>
+      <ul id="lista-clientes"></ul>
     </section>
-  </div>
 
-  <!-- FIADO -->
-  <div id="fiado" class="tabcontent" style="display:none;">
-    <section class="card">
-      <h2>Clientes Fiéis</h2>
-      <ul id="listaFiado"></ul>
-      <div id="detalhesFiado"></div>
+    <!-- ABA FIADO -->
+    <section id="aba-fiado" class="aba">
+      <h2>Fiado</h2>
+      <p>Registre aqui o consumo fiado dos seus clientes.</p>
+      <ul id="lista-fiado"></ul>
     </section>
-  </div>
+  </main>
 
-  <!-- APP.JS -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
+  <footer>
+    <p>© 2025 Bar do Felipe 🍻</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+
+  <script>
+    // Alternar abas
+    function abrirAba(nome) {
+      document.querySelectorAll(".aba").forEach(a => a.classList.remove("ativa"));
+      document.getElementById(`aba-${nome}`).classList.add("ativa");
+      document.getElementById("menu").classList.add("hidden");
+    }
+
+    // Mostrar/esconder menu
+    function toggleMenu() {
+      document.getElementById("menu").classList.toggle("hidden");
+    }
+  </script>
+
 </body>
 </html>
