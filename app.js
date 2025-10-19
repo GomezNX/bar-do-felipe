@@ -47,33 +47,65 @@ function renderClientes() {
 
 /* ===== BEBIDAS ===== */
 async function carregarBebidas() {
-  const { data, error } = await supabase.from('bebidas').select('*');
-  if (error) return alert("Erro ao carregar bebidas: " + error.message);
-  bebidas = data;
-  renderBebidas();
+  try {
+    const { data, error } = await supabase.from('bebidas').select('*');
+    if (error) throw error;
+
+    bebidas = data || [];
+    renderBebidas();
+  } catch (err) {
+    alert("Erro ao carregar bebidas: " + err.message);
+  }
 }
 
 async function adicionarBebida() {
   const nome = document.getElementById("bebidaNome").value.trim();
   const preco = parseFloat(document.getElementById("bebidaPreco").value);
-  if (!nome || isNaN(preco)) return alert("Preencha nome e preço!");
 
-  const { data, error } = await supabase.from('bebidas').insert([{ nome, preco }]).select();
-  if (error) return alert("Erro ao salvar bebida: " + error.message);
+  if (!nome || isNaN(preco)) {
+    alert("Preencha o nome da bebida e o preço corretamente!");
+    return;
+  }
 
-  bebidas.push({ id: data[0].id, nome: data[0].nome, preco: data[0].preco });
-  document.getElementById("bebidaNome").value = "";
-  document.getElementById("bebidaPreco").value = "";
-  renderBebidas();
+  try {
+    // Envia pro banco
+    const { data, error } = await supabase
+      .from('bebidas')
+      .insert([{ nome, preco }])
+      .select();
+
+    if (error) throw error;
+
+    // Adiciona à lista local
+    const novaBebida = { id: data[0].id, nome: data[0].nome, preco: data[0].preco };
+    bebidas.push(novaBebida);
+
+    // Limpa campos
+    document.getElementById("bebidaNome").value = "";
+    document.getElementById("bebidaPreco").value = "";
+
+    renderBebidas();
+    alert("Bebida adicionada com sucesso!");
+  } catch (err) {
+    alert("Erro ao adicionar bebida: " + err.message);
+  }
 }
 
 function renderBebidas() {
   const lista = document.getElementById("listaBebidas");
-  if(!lista) return;
+  if (!lista) return;
   lista.innerHTML = "";
+
+  if (bebidas.length === 0) {
+    lista.innerHTML = "<li>Nenhuma bebida cadastrada ainda.</li>";
+    return;
+  }
+
   bebidas.forEach(b => {
     const li = document.createElement("li");
-    li.innerHTML = `<span>${b.nome} - R$${b.preco.toFixed(2)}</span>`;
+    li.innerHTML = `
+      <span>${b.nome} - R$ ${b.preco.toFixed(2)}</span>
+    `;
     lista.appendChild(li);
   });
 }
