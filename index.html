@@ -1,71 +1,96 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🍻 Bar do Felipe</title>
-  <link rel="stylesheet" href="styles/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Bebidas</title>
+  <style>
+    /* ===== Estilo básico ===== */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background-color: #f8f9fa;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Cadastro de Bebidas</h1>
+    
+    <form id="formBebida">
+      <input type="text" id="nome" placeholder="Nome da bebida" required>
+      <input type="number" id="valor" placeholder="Valor" required>
+      <button type="submit">Adicionar</button>
+    </form>
 
-  <header>
-    <button id="menu-btn" onclick="toggleMenu()">☰</button>
-    <h1>Bar do Felipe</h1>
-  </header>
+    <ul id="listaBebidas"></ul>
+  </div>
 
-  <nav id="menu" class="hidden">
-    <button onclick="abrirAba('bebidas')">🍺 Bebidas</button>
-    <button onclick="abrirAba('clientes')">👤 Clientes</button>
-    <button onclick="abrirAba('fiado')">💰 Fiado</button>
-  </nav>
-
-  <main>
-    <!-- ABA BEBIDAS -->
-    <section id="aba-bebidas" class="aba ativa">
-      <h2>Bebidas</h2>
-      <input type="text" id="bebida-nome" placeholder="Nome da bebida" />
-      <input type="number" id="bebida-preco" placeholder="Preço" step="0.01" />
-      <button onclick="adicionarBebida()">Adicionar</button>
-      <ul id="lista-bebidas"></ul>
-    </section>
-
-    <!-- ABA CLIENTES -->
-    <section id="aba-clientes" class="aba">
-      <h2>Clientes</h2>
-      <input type="text" id="cliente-nome" placeholder="Nome do cliente" />
-      <button onclick="adicionarCliente()">Registrar</button>
-      <ul id="lista-clientes"></ul>
-    </section>
-
-    <!-- ABA FIADO -->
-    <section id="aba-fiado" class="aba">
-      <h2>Fiado</h2>
-      <p>Registre aqui o consumo fiado dos seus clientes.</p>
-      <ul id="lista-fiado"></ul>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 Bar do Felipe 🍻</p>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
-
-  <script>
-    // Alternar abas
-    function abrirAba(nome) {
-      document.querySelectorAll(".aba").forEach(a => a.classList.remove("ativa"));
-      document.getElementById(`aba-${nome}`).classList.add("ativa");
-      document.getElementById("menu").classList.add("hidden");
-    }
-
-    // Mostrar/esconder menu
-    function toggleMenu() {
-      document.getElementById("menu").classList.toggle("hidden");
-    }
-  </script>
-
+  <!-- Conecta com seu app.js -->
+  <script type="module" src="app.js"></script>
 </body>
 </html>
