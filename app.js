@@ -1,14 +1,12 @@
 /* ===== BAR DO FELIPE - App com Supabase ===== */
 
-/* ===== CONEXÃO SUPABASE ===== */
-const SUPABASE_URL = 'COLE_AQUI_A_URL_DO_PROJETO';
-const SUPABASE_KEY = 'COLE_AQUI_A_CHAVE_PUBLICA';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// ======= CONFIGURAÇÃO DO SUPABASE =======
+const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";
+const SUPABASE_KEY = "SUA-CHAVE-API";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/* ===== VARIÁVEIS ===== */
-let clientes = [];
+// ======= VARIÁVEIS GLOBAIS =======
 let bebidas = [];
-
 /* ===== CLIENTES ===== */
 async function carregarClientes() {
   const { data, error } = await supabase.from('clientes').select('*');
